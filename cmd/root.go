@@ -31,11 +31,13 @@ var rootCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		files := utils.FindAllFiles(args[0])
+		var results []string
 		for _, file := range files {
 			if result := utils.CheckFile(file); result != "" {
-				fmt.Println(result)
+				results = append(results, result)
 			}
 		}
+		utils.WriteToOutput(args[0], results)
 
 		fmt.Println("===== Collecting finished =====")
 	},

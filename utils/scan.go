@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"io/ioutil"
 )
 
 // FindAllFiles finds all files in the path.
@@ -68,4 +69,25 @@ func CheckFile(path string) string {
 		return ""
 	}
 	return title + result
+}
+
+// WriteToOutput writes all results to a file.
+func WriteToOutput(path string, files []string) {
+	var pathName string
+	if path == "./" {
+		pathName = "output/default.txt"
+	} else {
+		pathName = "output/path_" + path + ".txt"
+	}
+	if _, err := os.Stat("/path/to/whatever"); os.IsNotExist(err) {
+		_, err := os.Create(pathName)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	
+	filesStr := strings.Join(files, "\n")
+	if err := ioutil.WriteFile(pathName, []byte(filesStr), 0644); err != nil {
+		log.Fatal(err)
+	}
 }
