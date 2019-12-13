@@ -53,7 +53,7 @@ func CheckFile(path string) string {
 
 	for i, line := range txtlines {
 		if strings.HasPrefix(line, "//") {
-			current += line[2:] + " "
+			current += strings.Trim(line[2:], " ") + " "
 		} else {
 			if len(current) != 0 {
 				result += path + ":" + strconv.Itoa(i) + current + "\n"
@@ -62,12 +62,16 @@ func CheckFile(path string) string {
 		}
 	}
 	if current != "" {
+		current = strings.Join(strings.Fields(strings.TrimSpace(current)), " ")
+
 		result += current + "\n"
 	}
 
 	if len(result) == 0 {
 		return ""
 	}
+
+
 	return title + result
 }
 

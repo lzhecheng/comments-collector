@@ -28,16 +28,36 @@ var rootCmd = &cobra.Command{
 	Use:   "cmtcltor",
 	Short: "Collect comments",
 	Long:  `Comments-collector is a tool to collect comments in code.`,
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		files := utils.FindAllFiles(args[0])
+		fmt.Println("===== Find all files finished =====")
+
 		var results []string
-		for _, file := range files {
+		total := float64(len(files))
+		m25 := false
+		m50 := false
+		m75 := false
+		for i, file := range files {
+			progress := float64(i) / total
+			if progress > 0.25 && !m25 {
+				fmt.Println("===== 25% =====")
+				m25 = true
+			}
+			if progress > 0.5 && !m50 {
+				fmt.Println("===== 50% =====")
+				m50 = true
+			}
+			if progress > 0.75 && !m75 {
+				fmt.Println("===== 75% =====")
+				m75 = true
+			}
+			
 			if result := utils.CheckFile(file); result != "" {
 				results = append(results, result)
 			}
 		}
-		utils.WriteToOutput(args[0], results)
+		utils.WriteToOutput(args[1], results)
 
 		fmt.Println("===== Collecting finished =====")
 	},
