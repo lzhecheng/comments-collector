@@ -18,5 +18,5 @@ package main
 import "github.com/lzhecheng/comments-collector/cmd"
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }
